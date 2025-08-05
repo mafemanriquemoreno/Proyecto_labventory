@@ -58,7 +58,7 @@ class AuthController extends Controller
             ]);
         }
 
-        // Si todo es correcto, creamos un token (la tarjeta de acceso)
+        // si todo es correcto, creamos un token (la tarjeta de acceso)
         $token = $user->createToken('auth_token')->plainTextToken;
 
         // Devolvemos el token al usuario
