@@ -7,8 +7,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
+        // --- AÑADIDO: Bloque de Autolimpieza ---
+        // Este bloque se asegura de que todos los tipos ENUM personalizados se eliminen
+        // antes de intentar crearlos. Esto previene el error de "objeto duplicado".
+        DB::statement('DROP TYPE IF EXISTS tipo_movimiento_inventario CASCADE');
+        DB::statement('DROP TYPE IF EXISTS tipo_elemento_inventario CASCADE');
+        DB::statement('DROP TYPE IF EXISTS tipo_presentacion CASCADE');
+        DB::statement('DROP TYPE IF EXISTS nivel_bioseguridad CASCADE');
+        DB::statement('DROP TYPE IF EXISTS tipo_laboratorio CASCADE');
+
+
+        // --- El resto del código continúa como antes ---
         DB::statement("CREATE TYPE tipo_laboratorio AS ENUM ('Química', 'Microbiología', 'Biología Molecular', 'Veterinaria', 'Investigación', 'Clínico', 'Otro')");
         DB::statement("CREATE TYPE nivel_bioseguridad AS ENUM ('BSL-1', 'BSL-2', 'BSL-3', 'BSL-4')");
 
@@ -27,6 +41,9 @@ return new class extends Migration
         DB::statement("ALTER TABLE laboratorio ALTER COLUMN nivel_bioseguridad_lab TYPE nivel_bioseguridad USING (nivel_bioseguridad_lab::nivel_bioseguridad)");
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('laboratorio');

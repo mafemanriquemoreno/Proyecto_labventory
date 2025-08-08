@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Proveedor;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProveedorSeeder extends Seeder
@@ -13,16 +12,19 @@ class ProveedorSeeder extends Seeder
      */
     public function run(): void
     {
-        Proveedor::create([
-            'nombre_proveedor' => 'ProQuímicos S.A.S',
-            'telefono_proveedor' => '601-555-1234',
-            'correo_proveedor' => 'ventas@proquimicos.com',
-        ]);
+        // Limpiamos la tabla para evitar duplicados
+        Proveedor::truncate();
+        
+        $proveedores = [
+            'ProQuímicos S.A.S', // <-- Añadido para que el otro seeder lo encuentre
+            'Abbott', 
+            'Roche', 
+            'Siemens', 
+            'Sysmex'
+        ];
 
-        Proveedor::create([
-            'nombre_proveedor' => 'BioSuministros Global',
-            'telefono_proveedor' => '604-555-5678',
-            'correo_proveedor' => 'pedidos@biosg.com',
-        ]);
+        foreach ($proveedores as $proveedor) {
+            Proveedor::create(['nombre_proveedor' => $proveedor]);
+        }
     }
 }
